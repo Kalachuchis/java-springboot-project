@@ -1,8 +1,11 @@
 package com.example.discussion.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.util.Set;
 
 @Entity
 @Table(name="courses")
@@ -12,22 +15,33 @@ public class Course {
   @GeneratedValue
   private Long id;
 
+  // Properties
+  @Column
   private String title;
+  @Column
   private String description;
-  private Time length;
+  @Column
+  private Long length;
+  @Column
   private BigDecimal price;
+  @Column
+  private Boolean active = true;
 
-  @ManyToMany()
-  private User user;
+
+  // Foreign key
+  @ManyToMany(mappedBy = "courses")
+  @JsonIgnore
+  private Set<User> user;
 
   // Constructors
   public Course (){}
 
-  public Course(String title, String description, Time length, BigDecimal price, User user) {
+  public Course(String title, String description, Long length, BigDecimal price, User user, Boolean active) {
     this.title = title;
     this.description = description;
     this.length = length;
     this.price = price;
+    this.active = active;
   }
 
   // Getters and Setters
@@ -55,11 +69,11 @@ public class Course {
     this.description = description;
   }
 
-  public Time getLength() {
+  public Long getLength() {
     return length;
   }
 
-  public void setLength(Time length) {
+  public void setLength(Long length) {
     this.length = length;
   }
 
@@ -71,11 +85,19 @@ public class Course {
     this.price = price;
   }
 
-  public User getUser() {
+  public Set<User> getUser() {
     return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(Set<User> user) {
     this.user = user;
+  }
+
+  public Boolean getActive() {
+    return active;
+  }
+
+  public void setActive(Boolean active) {
+    this.active = active;
   }
 }
