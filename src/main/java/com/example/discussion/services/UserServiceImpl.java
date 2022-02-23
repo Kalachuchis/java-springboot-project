@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -50,8 +51,10 @@ public class UserServiceImpl implements UserService {
       return new ResponseEntity("You are not authorized to edit this user.", HttpStatus.UNAUTHORIZED);
     }
 
+    String password = user.getPassword();
+    String encodedPassword = new BCryptPasswordEncoder().encode(password);
     userToBeUpdated.setUsername(user.getUsername());
-    userToBeUpdated.setPassword(user.getPassword());
+    userToBeUpdated.setPassword(encodedPassword);
     userToBeUpdated.setFullName(user.getFullName());
     userToBeUpdated.setAddress(user.getAddress());
 

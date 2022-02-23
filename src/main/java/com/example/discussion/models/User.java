@@ -29,7 +29,7 @@ public class User {
   // Foreign Key
   // Makes User_Courses table to join users and courses
   @ManyToMany
-//  @JsonManagedReference
+  @JsonIgnore
   @JoinTable(
       name = "Users_Courses",
       joinColumns = @JoinColumn(name = "user_id"),

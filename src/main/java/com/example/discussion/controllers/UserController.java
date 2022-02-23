@@ -75,7 +75,6 @@ public class UserController {
       userService.createUser(newUser);
 
       return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-
     }
   }
 }
