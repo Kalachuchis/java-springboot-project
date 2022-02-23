@@ -38,4 +38,10 @@ public class CourseController {
   public ResponseEntity<Object> updateCourse(@PathVariable Long course_id, @RequestBody Course course){
     return courseService.updateCourse(course_id, course);
   }
+
+  @PutMapping("/courses/archive/{course_id}")
+  public ResponseEntity<Object> archiveCourse(@PathVariable Long course_id){
+    return courseService.archiveCourse(course_id);
+  }
+
 }

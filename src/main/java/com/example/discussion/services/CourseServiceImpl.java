@@ -61,7 +61,7 @@ public class CourseServiceImpl implements CourseService{
     // save course
     coursesRepository.save(courseForArchiving);
 
-    return new ResponseEntity("Course with id " + id + " was updated to" + courseForArchiving.getActive(), HttpStatus.OK);
+    return new ResponseEntity("Course with id " + id + " was updated to " + courseForArchiving.getActive(), HttpStatus.OK);
   }
 
   public Optional<Course> findByTitle(String title){

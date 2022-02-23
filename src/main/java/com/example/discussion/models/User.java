@@ -7,9 +7,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="Users")
-//@JsonIdentityInfo(
-//    generator = ObjectIdGenerators.PropertyGenerator.class,
-//    property = "fullName")
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "fullName")
 public class User {
 
   @Id
@@ -29,7 +29,7 @@ public class User {
   // Foreign Key
   // Makes User_Courses table to join users and courses
   @ManyToMany
-  @JsonIgnore
+//  @JsonIgnore
   @JoinTable(
       name = "Users_Courses",
       joinColumns = @JoinColumn(name = "user_id"),
