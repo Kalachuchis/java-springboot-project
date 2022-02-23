@@ -12,6 +12,7 @@ public interface CourseService {
   ResponseEntity updateCourse(Long id, Course course);
   ResponseEntity archiveCourse(Long id);
   Optional<Course> findByTitle(String title);
+//  ResponseEntity getEnrolledUsers
 
 
 }

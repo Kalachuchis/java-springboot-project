@@ -1,6 +1,9 @@
 package com.example.discussion.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,6 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="courses")
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "title")
 public class Course {
 
   @Id
@@ -30,7 +36,7 @@ public class Course {
 
   // Foreign key
   @ManyToMany(mappedBy = "courses")
-  @JsonIgnore
+  @JsonBackReference
   private Set<User> user;
 
   // Constructors

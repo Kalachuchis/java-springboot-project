@@ -13,4 +13,5 @@ public interface UserService {
   ResponseEntity updateUser(Long id, User user);
   ResponseEntity enrollCourse(String courseTitle, Long user_id);
   Optional<User> findByUsername(String username);
+//  ResponseEntity getEnrolledCourses
 }

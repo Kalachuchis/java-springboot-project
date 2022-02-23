@@ -1,10 +1,15 @@
 package com.example.discussion.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name="Users")
+//@JsonIdentityInfo(
+//    generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "fullName")
 public class User {
 
   @Id
@@ -24,6 +29,7 @@ public class User {
   // Foreign Key
   // Makes User_Courses table to join users and courses
   @ManyToMany
+  @JsonManagedReference
   @JoinTable(
       name = "Users_Courses",
       joinColumns = @JoinColumn(name = "user_id"),

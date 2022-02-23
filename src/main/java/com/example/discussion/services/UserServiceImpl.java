@@ -4,6 +4,7 @@ import com.example.discussion.models.Course;
 import com.example.discussion.models.User;
 import com.example.discussion.repositories.CoursesRepository;
 import com.example.discussion.repositories.UsersRepository;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,23 +54,20 @@ public class UserServiceImpl implements UserService {
   }
 
   public ResponseEntity enrollCourse(String courseTitle, Long user_id){
-    User enrolee = usersRepository.findById(user_id).get();
-    Course courseToBeEnrolled = coursesRepository.findByTitle(courseTitle);
+    User enrollee = usersRepository.findById(user_id).get(); // finds user to be enrolled
+    Course courseToBeEnrolled = coursesRepository.findByTitle(courseTitle); // finds specified course
 
-    Set<Course> enrolledCourse =enrolee.getCourses();
-    Set<User> enrolledUsers = courseToBeEnrolled.getUser();
+    Set<Course> enrolledCourse =enrollee.getCourses(); // gets the courses property from the user
+    Set<User> enrolledUsers = courseToBeEnrolled.getUser(); // gets the user property form the courses
 
     enrolledCourse.add(courseToBeEnrolled);
-    enrolledUsers.add(enrolee);
+    enrollee.setCourses(enrolledCourse);
+    usersRepository.save(enrollee);
 
+//    enrolledUsers.add(enrollee);
+//    courseToBeEnrolled.setUser(enrolledUsers);
+//    coursesRepository.save(courseToBeEnrolled);
 
-    enrolee.setCourses(enrolledCourse);
-    courseToBeEnrolled.setUser(enrolledUsers);
-
-    usersRepository.save(enrolee);
-    coursesRepository.save(courseToBeEnrolled);
-    return new ResponseEntity(enrolee.getUsername() + " successfully enrolled in " + courseTitle, HttpStatus.OK);
-
-//    return new ResponseEntity(enrolledCourse,HttpStatus.OK);
+    return new ResponseEntity(enrollee.getUsername() + " successfully enrolled in " + courseTitle, HttpStatus.OK);
   }
 }
