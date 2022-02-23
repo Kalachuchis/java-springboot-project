@@ -2,6 +2,7 @@ package com.example.discussion.controllers;
 
 import com.example.discussion.exceptions.UserException;
 import com.example.discussion.models.User;
+import com.example.discussion.repositories.UsersRepository;
 import com.example.discussion.services.UserService;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.Map;
 public class UserController {
   @Autowired
   UserService userService;
+
+  @Autowired
+  UsersRepository usersRepository;
 
   @GetMapping("/test")
   public String hello(){
@@ -42,13 +46,13 @@ public class UserController {
   }
 
   @RequestMapping(value ="/users/{user_id}", method = RequestMethod.PUT)
-  public ResponseEntity<Object> updateUser(@PathVariable Long user_id, @RequestBody User user){
-    return userService.updateUser(user_id, user);
+  public ResponseEntity<Object> updateUser(@PathVariable Long user_id, @RequestBody User user, @RequestHeader(value = "Authorization") String stringToken){
+    return userService.updateUser(user_id, user, stringToken);
   }
 
   @RequestMapping(value = "/enroll_course/{user_id}/{courseTitle}", method = RequestMethod.PUT)
-  public ResponseEntity<Object> enrollCourse(@PathVariable(value ="courseTitle") String courseTitle, @PathVariable(value = "user_id") Long user_id){
-    return  userService.enrollCourse(courseTitle, user_id);
+  public ResponseEntity<Object> enrollCourse(@PathVariable(value ="courseTitle") String courseTitle, @PathVariable(value = "user_id") Long user_id, @RequestHeader(value = "Authorization") String stringToken){
+    return  userService.enrollCourse(courseTitle, user_id, stringToken);
   }
 
 

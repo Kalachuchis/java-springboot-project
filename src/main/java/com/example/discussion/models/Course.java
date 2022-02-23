@@ -36,7 +36,8 @@ public class Course {
 
   // Foreign key
   @ManyToMany(mappedBy = "courses")
-  @JsonBackReference
+//  @JsonBackReference
+  @JsonIgnore
   private Set<User> user;
 
   // Constructors

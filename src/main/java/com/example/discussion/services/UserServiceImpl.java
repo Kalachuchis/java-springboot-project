@@ -1,5 +1,6 @@
 package com.example.discussion.services;
 
+import com.example.discussion.config.JwtToken;
 import com.example.discussion.models.Course;
 import com.example.discussion.models.User;
 import com.example.discussion.repositories.CoursesRepository;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private CoursesRepository coursesRepository;
 
+  @Autowired
+  JwtToken jwtToken;
+
   public ResponseEntity createUser (User user){
     for(User indivUser: usersRepository.findAll()){
       if(user.getUsername().equalsIgnoreCase(indivUser.getUsername())) return new ResponseEntity("User already exists", HttpStatus.CONFLICT);
@@ -37,8 +41,14 @@ public class UserServiceImpl implements UserService {
     return new ResponseEntity("User deleted successfully", HttpStatus.OK);
   }
 
-  public ResponseEntity updateUser(Long id, User user){
+  public ResponseEntity updateUser(Long id, User user, String stringToken){
     User userToBeUpdated = usersRepository.findById(id).get();
+    String userToBeUpdatedName = userToBeUpdated.getUsername();
+    String authenticatedUsername = jwtToken.getUsernameFromToken(stringToken);
+
+    if(!authenticatedUsername.equalsIgnoreCase(userToBeUpdatedName)) {
+      return new ResponseEntity("You are not authorized to edit this user.", HttpStatus.UNAUTHORIZED);
+    }
 
     userToBeUpdated.setUsername(user.getUsername());
     userToBeUpdated.setPassword(user.getPassword());
@@ -53,9 +63,15 @@ public class UserServiceImpl implements UserService {
     return Optional.ofNullable(usersRepository.findByUsername(username));
   }
 
-  public ResponseEntity enrollCourse(String courseTitle, Long user_id){
+  public ResponseEntity enrollCourse(String courseTitle, Long user_id, String stringToken){
     User enrollee = usersRepository.findById(user_id).get(); // finds user to be enrolled
     Course courseToBeEnrolled = coursesRepository.findByTitle(courseTitle); // finds specified course
+    String enrolleeName = enrollee.getUsername();
+    String authenticatedUsername = jwtToken.getUsernameFromToken(stringToken);
+
+    if(!authenticatedUsername.equalsIgnoreCase(enrolleeName)) {
+      return new ResponseEntity("You are not authorized to enroll to this course.", HttpStatus.UNAUTHORIZED);
+    }
 
     Set<Course> enrolledCourse =enrollee.getCourses(); // gets the courses property from the user
     Set<User> enrolledUsers = courseToBeEnrolled.getUser(); // gets the user property form the courses

@@ -56,14 +56,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
 
   }
-  // Routes that will not require JWT
 
+  // Routes that will not require JWT
   @Override
   protected void configure(HttpSecurity httpSecurity) throws Exception {
     httpSecurity.cors().and().csrf().disable()
         .authorizeRequests()
         .antMatchers("/login").permitAll()
-        .antMatchers("/users").permitAll()
+//        .antMatchers("/users").permitAll()
         .antMatchers("/users/register").permitAll()
         .antMatchers(HttpMethod.GET, "/courses").permitAll()
         .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
