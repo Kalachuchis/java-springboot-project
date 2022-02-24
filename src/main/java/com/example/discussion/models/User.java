@@ -7,9 +7,9 @@ import java.util.Set;
 
 @Entity
 @Table(name="Users")
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "fullName")
+//@JsonIdentityInfo(
+//    generator = ObjectIdGenerators.PropertyGenerator.class,
+//    property = "fullName")
 public class User {
 
   @Id

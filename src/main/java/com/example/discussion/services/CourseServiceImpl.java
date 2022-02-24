@@ -1,6 +1,7 @@
 package com.example.discussion.services;
 
 import com.example.discussion.models.Course;
+import com.example.discussion.models.User;
 import com.example.discussion.repositories.CoursesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.ResultSetSupportingSqlParameter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourseServiceImpl implements CourseService{
@@ -31,6 +35,22 @@ public class CourseServiceImpl implements CourseService{
   // Get all courses
   public Iterable<Course> getCourse(){
     return coursesRepository.findAll();
+  }
+
+
+  // Get available courses
+
+
+  @Override
+  public ResponseEntity getAvailableCourses() {
+    ArrayList<Course> availableCourses = new ArrayList<>();
+
+    for (Course course: coursesRepository.findAll()){
+      if(course.getActive()){
+        availableCourses.add(course);
+      }
+    }
+    return new ResponseEntity(availableCourses, HttpStatus.OK);
   }
 
   // Delete course by ID
@@ -58,6 +78,11 @@ public class CourseServiceImpl implements CourseService{
     Course courseForArchiving = coursesRepository.findById(id).get();
     // update active attribute
     courseForArchiving.setActive(!courseForArchiving.getActive());
+
+//    // unenrolls users by setting new hasset to courseForArchiving
+//    Set<User> emptyUsers = new HashSet<>();
+//    courseForArchiving.setUser(emptyUsers);
+
     // save course
     coursesRepository.save(courseForArchiving);
 
@@ -68,5 +93,11 @@ public class CourseServiceImpl implements CourseService{
     return Optional.ofNullable(coursesRepository.findByTitle(title));
   }
 
+  public ResponseEntity getEnrolledUsers (Long id){
+    Course courseForFindingUsers = coursesRepository.findById(id).get();
+
+    Set<User> enrolledUsers = courseForFindingUsers.getUser();
+    return new ResponseEntity (enrolledUsers, HttpStatus.OK);
+  }
 
 }

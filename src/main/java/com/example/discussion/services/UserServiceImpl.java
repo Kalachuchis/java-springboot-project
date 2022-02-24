@@ -76,6 +76,8 @@ public class UserServiceImpl implements UserService {
       return new ResponseEntity("You are not authorized to enroll to this course.", HttpStatus.UNAUTHORIZED);
     }
 
+    if (!courseToBeEnrolled.getActive()) return new ResponseEntity("Sorry, this course is archived and cannot be enrolled", HttpStatus.CONFLICT);
+
     Set<Course> enrolledCourse =enrollee.getCourses(); // gets the courses property from the user
     Set<User> enrolledUsers = courseToBeEnrolled.getUser(); // gets the user property form the courses
 
@@ -88,5 +90,20 @@ public class UserServiceImpl implements UserService {
 //    coursesRepository.save(courseToBeEnrolled);
 
     return new ResponseEntity(enrollee.getUsername() + " successfully enrolled in " + courseTitle, HttpStatus.OK);
+  }
+
+  public ResponseEntity getEnrolledCourse (Long id, String stringToken){
+    User usersForFindingCourse = usersRepository.findById(id).get();
+
+    User userToBeUpdated = usersRepository.findById(id).get();
+    String userToBeUpdatedName = userToBeUpdated.getUsername();
+    String authenticatedUsername = jwtToken.getUsernameFromToken(stringToken);
+
+    if(!authenticatedUsername.equalsIgnoreCase(userToBeUpdatedName)) {
+      return new ResponseEntity("You are not authorized to see this user's courses.", HttpStatus.UNAUTHORIZED);
+    }
+
+    Set<Course> enrolledCourses = usersForFindingCourse.getCourses();
+    return new ResponseEntity (enrolledCourses, HttpStatus.OK);
   }
 }

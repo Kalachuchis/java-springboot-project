@@ -8,11 +8,12 @@ import java.util.Optional;
 public interface CourseService {
   ResponseEntity createCourse(Course course);
   Iterable<Course> getCourse();
+  ResponseEntity getAvailableCourses();
   ResponseEntity deleteCourse(Long id);
   ResponseEntity updateCourse(Long id, Course course);
   ResponseEntity archiveCourse(Long id);
   Optional<Course> findByTitle(String title);
-//  ResponseEntity getEnrolledUsers
+  ResponseEntity getEnrolledUsers (Long id);
 
 
 }

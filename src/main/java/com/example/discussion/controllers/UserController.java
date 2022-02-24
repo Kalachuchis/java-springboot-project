@@ -77,4 +77,9 @@ public class UserController {
       return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
   }
+
+  @GetMapping("/my_courses/{user_id}")
+  public ResponseEntity getEnrolledCourse (@PathVariable Long user_id, @RequestHeader(value = "Authorization") String stringtoken){
+    return (userService.getEnrolledCourse(user_id, stringtoken));
+  }
 }

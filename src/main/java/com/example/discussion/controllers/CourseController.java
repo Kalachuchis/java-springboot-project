@@ -25,6 +25,11 @@ public class CourseController {
     return new ResponseEntity<>(courseService.getCourse(), HttpStatus.OK);
   }
 
+  @GetMapping("/available_courses")
+  public ResponseEntity<Object> getAvailableCourses(){
+    return (courseService.getAvailableCourses());
+  }
+
   @DeleteMapping("/courses/{course_id}")
   public ResponseEntity<Object> deleteCourse(@PathVariable Long course_id){
     return courseService.deleteCourse(course_id);
@@ -42,6 +47,12 @@ public class CourseController {
   @PutMapping("/courses/archive/{course_id}")
   public ResponseEntity<Object> archiveCourse(@PathVariable Long course_id){
     return courseService.archiveCourse(course_id);
+  }
+
+  @GetMapping("/enrolled_users/{course_id}")
+  public ResponseEntity<Object> getEnrolledUsers(@PathVariable Long course_id){
+//    return new ResponseEntity<>("sup",HttpStatus.I_AM_A_TEAPOT);
+    return courseService.getEnrolledUsers(course_id);
   }
 
 }
